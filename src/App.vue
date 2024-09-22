@@ -5,6 +5,7 @@ import LogPane from "./components/LogPane.vue";
 import introImage from "./assets/event/intro.png";
 import Button from "./components/Button.vue";
 import { onClickOutside } from "@vueuse/core";
+import { PropmtItem } from "./types";
 
 const imageSrc = ref(introImage);
 const commandEl = ref<HTMLElement | null>(null);
@@ -19,6 +20,9 @@ const {
   isButtonPressed,
   mode,
   done,
+  prompt,
+  promptItems,
+  selectedPromptItem,
 } = useGameEngine();
 
 function* storyIntro() {
@@ -43,7 +47,19 @@ function* storyIntro() {
   addLog(
     "おばあちゃん「それじゃ単刀直入に言うけれど、裏山に行って薬草を採ってきてくれないかい」"
   );
-  yield* waitKey();
+  const okng = yield* prompt([
+    { label: "いいよ", value: "y" },
+    { label: "やだ", value: "n" },
+  ]);
+  if (okng === "y") {
+    addLog("コン「わかったよ。行ってくる」");
+  } else {
+    addLog("コン「嫌です」");
+    yield* wait(20);
+    addLog("おばあちゃん「ヒエ〜」");
+    yield* wait(50);
+    addLog("GAME OVER");
+  }
 }
 
 function onClickStart() {
@@ -56,6 +72,10 @@ onClickOutside(commandEl, (event) => {
     isButtonPressed.value = true;
   }
 });
+
+function onClickPrompt(item: PropmtItem) {
+  selectedPromptItem.value = item;
+}
 </script>
 
 <template>
@@ -85,6 +105,16 @@ onClickOutside(commandEl, (event) => {
         </div>
         <div v-if="mode === 'waitKey'">
           <Button @click="isButtonPressed = true">OK</Button>
+        </div>
+        <div v-if="mode === 'prompt'">
+          <Button
+            v-for="item in promptItems"
+            :key="item.value"
+            @click="onClickPrompt(item)"
+            class="mr-2"
+          >
+            {{ item.label }}
+          </Button>
         </div>
       </div>
     </div>

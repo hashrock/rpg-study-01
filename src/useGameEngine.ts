@@ -1,5 +1,5 @@
 import { onMounted, ref, watch } from "vue";
-import type { LogItem, Mode } from "./types";
+import type { LogItem, Mode, PropmtItem as PromptItem } from "./types";
 
 export const useGameEngine = () => {
   const count = ref(0);
@@ -10,6 +10,8 @@ export const useGameEngine = () => {
   const iter = ref<Generator<string, void, unknown>>();
   const isButtonPressed = ref(false);
   const done = ref(true);
+  const promptItems = ref<PromptItem[]>([]);
+  const selectedPromptItem = ref<PromptItem | null>(null);
 
   onMounted(() => {
     requestAnimationFrame(update);
@@ -39,6 +41,14 @@ export const useGameEngine = () => {
         }
         break;
 
+      case "prompt":
+        if (selectedPromptItem.value) {
+          mode.value = "normal";
+          selectedPromptItem.value = null;
+        }
+
+        break;
+
       default:
         if (iter.value) {
           const r = iter.value.next();
@@ -63,6 +73,15 @@ export const useGameEngine = () => {
     yield "waitKey";
   }
 
+  function* prompt(items: PromptItem[]) {
+    promptItems.value = [];
+    for (const item of items) {
+      promptItems.value.push(item);
+    }
+    yield "prompt";
+    return selectedPromptItem.value?.value;
+  }
+
   function addLog(str: string) {
     logs.value.push({
       ts: Date.now(),
@@ -80,5 +99,8 @@ export const useGameEngine = () => {
     isButtonPressed,
     waitKey,
     done,
+    prompt,
+    promptItems,
+    selectedPromptItem,
   };
 };
