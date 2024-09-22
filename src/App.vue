@@ -2,6 +2,10 @@
 import { ref, onMounted } from "vue";
 import { useGameEngine } from "./useGameEngine";
 import LogPane from "./components/LogPane.vue";
+import introImage from "./assets/event/intro.png";
+import Button from "./components/Button.vue";
+
+const imageSrc = ref(introImage);
 
 const {
   count,
@@ -31,19 +35,35 @@ function onClickStart() {
 </script>
 
 <template>
-  <div class="w-[600px] h-[800px] bg-white rounded-xl p-4">
+  <div class="w-[600px] h-[800px] bg-white rounded-xl p-4 flex flex-col">
     <!-- <div class="text-red-500">
       {{ count }}
     </div> -->
-    <LogPane class="h-[200px] bg-gray-100" :logs="logs" />
-
+    <div class="w-[600px] h-[600px] flex items-center">
+      <img :src="imageSrc" alt="image" class="w-full object-contain" />
+    </div>
+    <div class="flex flex-col">
+      <div class="flex gap-4">
+        <img
+          src="./assets/chr/face.png"
+          alt="chara"
+          class="w-[160px] h-[160px]"
+        />
+        <LogPane
+          class="flex-1 h-[130px] bg-gray-100 p-4 rounded-lg"
+          :logs="logs"
+        />
+      </div>
+      <div class="h-16 p-2 flex items-center">
+        <div v-if="mode === 'normal' && done">
+          <Button @click="onClickStart">ゲームを始める</Button>
+        </div>
+        <div v-if="mode === 'waitKey'">
+          <Button @click="isButtonPressed = true">OK</Button>
+        </div>
+      </div>
+    </div>
     <!-- <div>{{ mode }} {{ isButtonPressed }}</div> -->
-    <div v-if="mode === 'normal' && done">
-      <button @click="onClickStart">ゲームを始める</button>
-    </div>
-    <div v-if="mode === 'waitKey'">
-      <button @click="isButtonPressed = true">OK</button>
-    </div>
   </div>
 </template>
 

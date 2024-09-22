@@ -22,7 +22,7 @@ watch(
 </script>
 
 <template>
-  <div class="overflow-y-auto" ref="logEl">
+  <div class="overflow-y-hidden" ref="logEl">
     <div v-for="{ message, ts } in limitedLogs" :key="ts">{{ message }}</div>
   </div>
 </template>
