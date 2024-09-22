@@ -3,8 +3,17 @@ import { ref, onMounted } from "vue";
 import { useGameEngine } from "./useGameEngine";
 import LogPane from "./components/LogPane.vue";
 
-const { count, logs, addLog, iter, wait, waitKey, isButtonPressed, mode } =
-  useGameEngine();
+const {
+  count,
+  logs,
+  addLog,
+  iter,
+  wait,
+  waitKey,
+  isButtonPressed,
+  mode,
+  done,
+} = useGameEngine();
 
 function* inn() {
   yield* wait(10);
@@ -22,15 +31,17 @@ function onClickStart() {
 </script>
 
 <template>
-  <div class="w-[600px] h-[600px] bg-white">
-    <div class="text-red-500">
+  <div class="w-[600px] h-[600px] bg-white rounded-xl p-4">
+    <!-- <div class="text-red-500">
       {{ count }}
-    </div>
+    </div> -->
     <LogPane class="h-[200px] bg-gray-100" :logs="logs" />
 
-    <div>{{ mode }} {{ isButtonPressed }}</div>
-    <div>
+    <!-- <div>{{ mode }} {{ isButtonPressed }}</div> -->
+    <div v-if="mode === 'normal' && done">
       <button @click="onClickStart">ゲームを始める</button>
+    </div>
+    <div v-if="mode === 'waitKey'">
       <button @click="isButtonPressed = true">OK</button>
     </div>
   </div>
@@ -42,9 +53,10 @@ html {
   height: 100%;
 }
 body {
+  margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f3f4f6;
+  background-color: #3283d4;
 }
 </style>

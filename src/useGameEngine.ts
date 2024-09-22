@@ -1,4 +1,4 @@
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import type { LogItem, Mode } from "./types";
 
 export const useGameEngine = () => {
@@ -9,9 +9,16 @@ export const useGameEngine = () => {
   const mode = ref<Mode>("normal");
   const iter = ref<Generator<string, void, unknown>>();
   const isButtonPressed = ref(false);
+  const done = ref(true);
 
   onMounted(() => {
     requestAnimationFrame(update);
+  });
+
+  watch(iter, (newIter) => {
+    if (newIter) {
+      done.value = false;
+    }
   });
 
   function update() {
@@ -38,6 +45,9 @@ export const useGameEngine = () => {
           if (r.value) {
             mode.value = r.value as Mode;
           }
+          if (r.done) {
+            done.value = true;
+          }
         }
         break;
     }
@@ -60,5 +70,15 @@ export const useGameEngine = () => {
     });
   }
 
-  return { count, logs, addLog, iter, wait, mode, isButtonPressed, waitKey };
+  return {
+    count,
+    logs,
+    addLog,
+    iter,
+    wait,
+    mode,
+    isButtonPressed,
+    waitKey,
+    done,
+  };
 };
