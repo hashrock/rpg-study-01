@@ -1,60 +1,52 @@
-import { onMounted, ref, watch } from "vue";
-import type { Mode, PromptItem as PromptItem } from "./types";
+import { onMounted, watch } from "vue";
+import type { Mode } from "./types";
+import { useModeStore } from "./store/useModeStore";
 
 export const useGameEngine = () => {
-  const count = ref(0);
-  const waitTime = ref(0);
-
-  const mode = ref<Mode>("normal");
-  const iter = ref<Generator<string, void, unknown>>();
-  const isButtonPressed = ref(false);
-  const done = ref(true);
-  const promptItems = ref<PromptItem[]>([]);
-  const selectedPromptItem = ref<PromptItem | null>(null);
-
+  const modeStore = useModeStore();
   onMounted(() => {
     requestAnimationFrame(update);
   });
 
-  watch(iter, (newIter) => {
+  watch(() => modeStore.iter, (newIter) => {
     if (newIter) {
-      done.value = false;
+      modeStore.done = false;
     }
   });
 
   function update() {
-    count.value++;
+    modeStore.count++;
 
-    switch (mode.value) {
+    switch (modeStore.mode) {
       case "wait":
-        waitTime.value--;
-        if (waitTime.value <= 0) {
-          mode.value = "normal";
+        modeStore.waitTime--;
+        if (modeStore.waitTime <= 0) {
+          modeStore.mode = "normal";
         }
         break;
 
       case "waitKey":
-        if (isButtonPressed.value) {
-          mode.value = "normal";
-          isButtonPressed.value = false;
+        if (modeStore.isButtonPressed) {
+          modeStore.mode = "normal";
+          modeStore.isButtonPressed = false;
         }
         break;
 
       case "prompt":
-        if (selectedPromptItem.value) {
-          mode.value = "normal";
+        if (modeStore.selectedPromptItem) {
+          modeStore.mode = "normal";
         }
 
         break;
 
       default:
-        if (iter.value) {
-          const r = iter.value.next();
+        if (modeStore.iter) {
+          const r = modeStore.iter.next();
           if (r.value) {
-            mode.value = r.value as Mode;
+            modeStore.mode = r.value as Mode;
           }
           if (r.done) {
-            done.value = true;
+            modeStore.mode = "normal";
           }
         }
         break;
@@ -62,36 +54,8 @@ export const useGameEngine = () => {
 
     requestAnimationFrame(update);
   }
-  function* wait(time: number) {
-    waitTime.value = time;
-    yield "wait";
-  }
-
-  function* waitKey() {
-    yield "waitKey";
-  }
-
-  function* prompt(items: PromptItem[]) {
-    selectedPromptItem.value = null;
-    promptItems.value = [];
-    for (const item of items) {
-      promptItems.value.push(item);
-    }
-    yield "prompt";
-    // @ts-ignores yield後には値が入っている
-    return selectedPromptItem.value?.value;
-  }
 
   return {
-    count,
-    iter,
-    wait,
-    mode,
-    isButtonPressed,
-    waitKey,
-    done,
     prompt,
-    promptItems,
-    selectedPromptItem,
   };
 };
