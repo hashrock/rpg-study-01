@@ -13,12 +13,13 @@ const iter = ref<Generator<string, void, unknown>>();
 
 onMounted(() => {
   iter.value = inn();
+  requestAnimationFrame(update);
 });
 
-const { pause, resume } = useRafFn(() => {
+function update() {
   count.value++;
 
-  switch (mode) {
+  switch (mode.value) {
     case "wait":
       waitTime.value--;
       if (waitTime.value <= 0) {
@@ -35,7 +36,9 @@ const { pause, resume } = useRafFn(() => {
       }
       break;
   }
-});
+
+  requestAnimationFrame(update);
+}
 
 function* wait(time: number) {
   waitTime.value = time;
@@ -47,11 +50,11 @@ function addLog(str: string) {
 }
 
 function* inn() {
-  yield* wait(1000);
+  yield* wait(10);
   addLog("1s passed");
-  yield* wait(2000);
+  yield* wait(10);
   addLog("2s passed");
-  yield* wait(3000);
+  yield* wait(10);
   addLog("3s passed");
 }
 </script>
