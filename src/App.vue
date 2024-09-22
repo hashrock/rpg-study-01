@@ -4,8 +4,10 @@ import { useGameEngine } from "./useGameEngine";
 import LogPane from "./components/LogPane.vue";
 import introImage from "./assets/event/intro.png";
 import Button from "./components/Button.vue";
+import { onClickOutside } from "@vueuse/core";
 
 const imageSrc = ref(introImage);
+const commandEl = ref<HTMLElement | null>(null);
 
 const {
   count,
@@ -20,8 +22,13 @@ const {
 } = useGameEngine();
 
 function* storyIntro() {
-  yield* wait(10);
-  addLog("1s passed");
+  addLog(
+    "ある森の中に、きつねのコンとおばあさんが二人で静かに暮らしておりました。"
+  );
+  yield* waitKey();
+  addLog("おばあちゃん「ちょっと体の調子が悪くてねえ」");
+  yield* waitKey();
+  addLog("コン「おばあちゃん。要求ははっきり言ってもらわないと」");
   yield* waitKey();
   addLog("2s passed");
   yield* wait(10);
@@ -32,6 +39,12 @@ function onClickStart() {
   count.value = 0;
   iter.value = storyIntro();
 }
+
+onClickOutside(commandEl, (event) => {
+  if (mode.value === "waitKey") {
+    isButtonPressed.value = true;
+  }
+});
 </script>
 
 <template>
@@ -52,9 +65,10 @@ function onClickStart() {
         <LogPane
           class="flex-1 h-[130px] bg-gray-100 p-4 rounded-lg"
           :logs="logs"
+          :isWaiting="mode === 'waitKey'"
         />
       </div>
-      <div class="h-16 p-2 flex items-center">
+      <div class="h-16 p-2 flex items-center" ref="commandEl">
         <div v-if="mode === 'normal' && done">
           <Button @click="onClickStart">ゲームを始める</Button>
         </div>

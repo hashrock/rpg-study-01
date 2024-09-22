@@ -3,6 +3,7 @@ import { watch, ref, nextTick, computed } from "vue";
 import type { LogItem } from "../types";
 const props = defineProps<{
   logs: LogItem[];
+  isWaiting: boolean;
 }>();
 
 const logEl = ref<HTMLElement | null>(null);
@@ -23,6 +24,12 @@ watch(
 
 <template>
   <div class="overflow-y-hidden" ref="logEl">
-    <div v-for="{ message, ts } in limitedLogs" :key="ts">{{ message }}</div>
+    <div v-for="({ message, ts }, index) in limitedLogs" :key="ts">
+      {{ message }}
+
+      <span v-if="index === limitedLogs.length - 1">
+        <span v-if="props.isWaiting" class="animate-ping text-xs">▽</span>
+      </span>
+    </div>
   </div>
 </template>
