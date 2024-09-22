@@ -1,5 +1,5 @@
 import { onMounted, ref, watch } from "vue";
-import type { LogItem, Mode, PropmtItem as PromptItem } from "./types";
+import type { LogItem, Mode, PromptItem as PromptItem } from "./types";
 
 export const useGameEngine = () => {
   const count = ref(0);

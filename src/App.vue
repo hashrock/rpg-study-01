@@ -8,7 +8,7 @@ import roadImage from "./assets/bg/road.png";
 
 import Button from "./components/Button.vue";
 import { onClickOutside } from "@vueuse/core";
-import { PropmtItem } from "./types";
+import { PromptItem } from "./types";
 
 const imageSrc = ref(titleImage);
 const commandEl = ref<HTMLElement | null>(null);
@@ -107,8 +107,8 @@ function* storyMountain() {
       if (randomBool(0.3)) {
         addLog("コン「茂みになにかありそう」");
         const selection = yield* prompt([
-          { label: "探す", value: "search" },
-          { label: "通り過ぎる", value: "pass" },
+          { label: "探す", value: "search", style: "primary" },
+          { label: "通り過ぎる", value: "pass", style: "secondary" },
         ]);
         if (selection === "search") {
           switch (randomInt(2)) {
@@ -152,7 +152,7 @@ onClickOutside(commandEl, (event) => {
   }
 });
 
-function onClickPrompt(item: PropmtItem) {
+function onClickPrompt(item: PromptItem) {
   selectedPromptItem.value = item;
 }
 </script>
@@ -194,6 +194,7 @@ function onClickPrompt(item: PropmtItem) {
             :key="item.value"
             @click="onClickPrompt(item)"
             class="mr-2"
+            :buttonStyle="item.style"
           >
             {{ item.label }}
           </Button>
