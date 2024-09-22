@@ -4,9 +4,11 @@ export const useGameEngine = () => {
   const count = ref(0);
   const logs = ref<string[]>([]);
   const waitTime = ref(0);
-  type Mode = "wait" | "normal";
+  type Mode = "wait" | "normal" | "waitKey";
   const mode = ref<Mode>("normal");
   const iter = ref<Generator<string, void, unknown>>();
+  const isButtonPressed = ref(false);
+
   onMounted(() => {
     requestAnimationFrame(update);
   });
@@ -19,6 +21,13 @@ export const useGameEngine = () => {
         waitTime.value--;
         if (waitTime.value <= 0) {
           mode.value = "normal";
+        }
+        break;
+
+      case "waitKey":
+        if (isButtonPressed.value) {
+          mode.value = "normal";
+          isButtonPressed.value = false;
         }
         break;
 
@@ -39,9 +48,13 @@ export const useGameEngine = () => {
     yield "wait";
   }
 
+  function* waitKey() {
+    yield "waitKey";
+  }
+
   function addLog(str: string) {
     logs.value.push(str);
   }
 
-  return { count, logs, addLog, iter, wait };
+  return { count, logs, addLog, iter, wait, mode, isButtonPressed, waitKey };
 };
