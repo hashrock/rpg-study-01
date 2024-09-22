@@ -51,12 +51,16 @@ function* storyIntro() {
     { label: "いいよ", value: "y" },
     { label: "やだ", value: "n" },
   ]);
+
+  console.log(okng);
   if (okng === "y") {
-    addLog("コン「わかったよ。行ってくる」");
+    addLog("コン「いいよ」");
+    yield* waitKey();
+    addLog("おばあちゃん「ありがとう、これを持っておゆき」");
   } else {
     addLog("コン「嫌です」");
     yield* wait(20);
-    addLog("おばあちゃん「ヒエ〜」");
+    addLog("おばあちゃん「ええ〜」");
     yield* wait(50);
     addLog("GAME OVER");
   }

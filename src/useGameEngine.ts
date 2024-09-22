@@ -44,7 +44,6 @@ export const useGameEngine = () => {
       case "prompt":
         if (selectedPromptItem.value) {
           mode.value = "normal";
-          selectedPromptItem.value = null;
         }
 
         break;
@@ -74,11 +73,13 @@ export const useGameEngine = () => {
   }
 
   function* prompt(items: PromptItem[]) {
+    selectedPromptItem.value = null;
     promptItems.value = [];
     for (const item of items) {
       promptItems.value.push(item);
     }
     yield "prompt";
+    // @ts-ignores yield後には値が入っている
     return selectedPromptItem.value?.value;
   }
 
