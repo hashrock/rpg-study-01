@@ -9,14 +9,15 @@ import roadImage from "../assets/bg/road.png";
 import Button from "./Button.vue";
 import { onClickOutside } from "@vueuse/core";
 import { PromptItem } from "../types";
+import { useLogStore } from "../store/useLogStore";
+
+const logStore = useLogStore();
 
 const imageSrc = ref(titleImage);
 const commandEl = ref<HTMLElement | null>(null);
 
 const {
   count,
-  logs,
-  addLog,
   iter,
   wait,
   waitKey,
@@ -28,10 +29,14 @@ const {
   selectedPromptItem,
 } = useGameEngine();
 
+function addLog(message: string) {
+  logStore.addLine(message);
+}
+
 function* storyIntro() {
   imageSrc.value = introImage;
 
-  logs.value = [];
+  logStore.clear();
 
   addLog(
     "ある森の中に、きつねのコンとおばあさんが二人で静かに暮らしておりました。"
@@ -177,7 +182,7 @@ function onClickPrompt(item: PromptItem) {
         />
         <LogPane
           class="flex-1 h-[130px] bg-orange-50 p-4 rounded-lg"
-          :logs="logs"
+          :logs="logStore.logs"
           :isWaiting="mode === 'waitKey'"
         />
       </div>

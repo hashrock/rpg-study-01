@@ -1,9 +1,8 @@
 import { onMounted, ref, watch } from "vue";
-import type { LogItem, Mode, PromptItem as PromptItem } from "./types";
+import type { Mode, PromptItem as PromptItem } from "./types";
 
 export const useGameEngine = () => {
   const count = ref(0);
-  const logs = ref<LogItem[]>([]);
   const waitTime = ref(0);
 
   const mode = ref<Mode>("normal");
@@ -83,17 +82,8 @@ export const useGameEngine = () => {
     return selectedPromptItem.value?.value;
   }
 
-  function addLog(str: string) {
-    logs.value.push({
-      ts: Date.now(),
-      message: str,
-    });
-  }
-
   return {
     count,
-    logs,
-    addLog,
     iter,
     wait,
     mode,

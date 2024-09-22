@@ -1,18 +1,21 @@
 <script lang="ts" setup>
 import { watch, ref, nextTick, computed } from "vue";
-import type { LogItem } from "../types";
 import LogLine from "./LogLine.vue";
-const props = defineProps<{
-  logs: LogItem[];
+
+import { useLogStore } from "../store/useLogStore";
+
+const logStore = useLogStore();
+
+defineProps<{
   isWaiting: boolean;
 }>();
 
 const logEl = ref<HTMLElement | null>(null);
 const limit = 20;
-const limitedLogs = computed(() => props.logs.slice(-limit));
+const limitedLogs = computed(() => logStore.logs.slice(-limit));
 
 watch(
-  () => props.logs.length,
+  () => logStore.logs.length,
   (_logs) => {
     nextTick(() => {
       if (logEl.value) {
