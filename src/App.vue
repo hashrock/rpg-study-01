@@ -5,10 +5,6 @@ import { useGameEngine } from "./useGameEngine";
 const { count, logs, addLog, iter, wait, waitKey, isButtonPressed, mode } =
   useGameEngine();
 
-onMounted(() => {
-  iter.value = inn();
-});
-
 function* inn() {
   yield* wait(10);
   addLog("1s passed");
@@ -35,7 +31,7 @@ function onClickStart() {
 
     <div>{{ mode }} {{ isButtonPressed }}</div>
     <div>
-      <button @click="onClickStart">Start</button>
+      <button @click="onClickStart">ゲームを始める</button>
       <button @click="isButtonPressed = true">OK</button>
     </div>
   </div>
