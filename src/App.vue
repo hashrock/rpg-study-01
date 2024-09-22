@@ -28,11 +28,22 @@ function* storyIntro() {
   yield* waitKey();
   addLog("おばあちゃん「ちょっと体の調子が悪くてねえ」");
   yield* waitKey();
-  addLog("コン「おばあちゃん。要求ははっきり言ってもらわないと」");
+  addLog("コン「おばあちゃん…。大丈夫？」");
   yield* waitKey();
-  addLog("2s passed");
-  yield* wait(10);
-  addLog("3s passed");
+  addLog("おばあちゃん「本当に、体の調子が悪いんだよ」");
+  yield* waitKey();
+  addLog("コン「おばあちゃん…」");
+  yield* waitKey();
+  addLog(
+    "コン「してほしいことがあるなら、はっきり言ってもらわないと。それじゃ子どもと一緒だよ」"
+  );
+  yield* waitKey();
+  addLog("おばあちゃん「冷たいねえ。現代っ子は」");
+  yield* waitKey();
+  addLog(
+    "おばあちゃん「それじゃ単刀直入に言うけれど、裏山に行って薬草を採ってきてくれないかい」"
+  );
+  yield* waitKey();
 }
 
 function onClickStart() {
