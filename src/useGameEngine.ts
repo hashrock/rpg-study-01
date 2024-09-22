@@ -1,10 +1,11 @@
 import { onMounted, ref } from "vue";
+import type { Mode } from "./types";
 
 export const useGameEngine = () => {
   const count = ref(0);
   const logs = ref<string[]>([]);
   const waitTime = ref(0);
-  type Mode = "wait" | "normal" | "waitKey";
+
   const mode = ref<Mode>("normal");
   const iter = ref<Generator<string, void, unknown>>();
   const isButtonPressed = ref(false);
