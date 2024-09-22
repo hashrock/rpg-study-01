@@ -2,12 +2,13 @@
 import { ref, onMounted } from "vue";
 import { useGameEngine } from "./useGameEngine";
 import LogPane from "./components/LogPane.vue";
+import titleImage from "./assets/event/title.jpg";
 import introImage from "./assets/event/intro.png";
 import Button from "./components/Button.vue";
 import { onClickOutside } from "@vueuse/core";
 import { PropmtItem } from "./types";
 
-const imageSrc = ref(introImage);
+const imageSrc = ref(titleImage);
 const commandEl = ref<HTMLElement | null>(null);
 
 const {
@@ -26,6 +27,10 @@ const {
 } = useGameEngine();
 
 function* storyIntro() {
+  imageSrc.value = introImage;
+
+  logs.value = [];
+
   addLog(
     "ある森の中に、きつねのコンとおばあさんが二人で静かに暮らしておりました。"
   );
@@ -39,7 +44,7 @@ function* storyIntro() {
   addLog("コン「おばあちゃん…」");
   yield* waitKey();
   addLog(
-    "コン「してほしいことがあるなら、はっきり言ってもらわないと。それじゃ子どもと一緒だよ」"
+    "コン「してほしいことがあるなら、はっきり言ってもらわないと。甘えだよそれは」"
   );
   yield* waitKey();
   addLog("おばあちゃん「冷たいねえ。現代っ子は」");
@@ -52,7 +57,6 @@ function* storyIntro() {
     { label: "やだ", value: "n" },
   ]);
 
-  console.log(okng);
   if (okng === "y") {
     addLog("コン「いいよ」");
     yield* waitKey();
@@ -84,10 +88,7 @@ function onClickPrompt(item: PropmtItem) {
 
 <template>
   <div class="w-[600px] h-[800px] bg-white rounded-xl p-4 flex flex-col">
-    <!-- <div class="text-red-500">
-      {{ count }}
-    </div> -->
-    <div class="w-[600px] h-[600px] flex items-center">
+    <div class="w-[600px] h-[550px] flex items-center overflow-clip">
       <img :src="imageSrc" alt="image" class="w-full object-contain" />
     </div>
     <div class="flex flex-col">
@@ -98,7 +99,7 @@ function onClickPrompt(item: PropmtItem) {
           class="w-[160px] h-[160px]"
         />
         <LogPane
-          class="flex-1 h-[130px] bg-gray-100 p-4 rounded-lg"
+          class="flex-1 h-[130px] bg-orange-50 p-4 rounded-lg"
           :logs="logs"
           :isWaiting="mode === 'waitKey'"
         />
