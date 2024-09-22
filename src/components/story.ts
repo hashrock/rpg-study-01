@@ -70,8 +70,8 @@ export function* storyIntro() {
     "おばあちゃん「それじゃ単刀直入に言うけれど、裏山に行って薬草を採ってきてくれないかい」",
   );
   const okng = yield* prompt([
-    { label: "いいよ", value: "y" },
-    { label: "やだ", value: "n" },
+    { label: "いいよ", value: "y", style: "primary" },
+    { label: "やだ", value: "n", style: "secondary" },
   ]);
   console.log(okng);
 
@@ -88,7 +88,11 @@ export function* storyIntro() {
     yield* wait(50);
     addLog("GAME OVER");
 
-    const retry = yield* prompt([{ label: "リトライ", value: "retry" }]);
+    const retry = yield* prompt([{
+      label: "リトライ",
+      value: "retry",
+      style: "primary",
+    }]);
     if (retry === "retry") {
       modeStore.iter = storyIntro();
     }
