@@ -54,8 +54,4 @@ export const useGameEngine = () => {
 
     requestAnimationFrame(update);
   }
-
-  return {
-    prompt,
-  };
 };
