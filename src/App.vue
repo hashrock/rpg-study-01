@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { useGameEngine } from "./useGameEngine";
 import LogPane from "./components/LogPane.vue";
 import titleImage from "./assets/event/title.jpg";
@@ -146,7 +146,7 @@ function onClickStart() {
   iter.value = storyIntro();
 }
 
-onClickOutside(commandEl, (event) => {
+onClickOutside(commandEl, (_event) => {
   if (mode.value === "waitKey") {
     isButtonPressed.value = true;
   }

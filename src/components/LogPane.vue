@@ -13,7 +13,7 @@ const limitedLogs = computed(() => props.logs.slice(-limit));
 
 watch(
   () => props.logs.length,
-  (logs) => {
+  (_logs) => {
     nextTick(() => {
       if (logEl.value) {
         logEl.value.scrollTop = logEl.value.scrollHeight;
