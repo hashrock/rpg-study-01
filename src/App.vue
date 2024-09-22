@@ -15,7 +15,7 @@ const {
   done,
 } = useGameEngine();
 
-function* inn() {
+function* storyIntro() {
   yield* wait(10);
   addLog("1s passed");
   yield* waitKey();
@@ -26,12 +26,12 @@ function* inn() {
 
 function onClickStart() {
   count.value = 0;
-  iter.value = inn();
+  iter.value = storyIntro();
 }
 </script>
 
 <template>
-  <div class="w-[600px] h-[600px] bg-white rounded-xl p-4">
+  <div class="w-[600px] h-[800px] bg-white rounded-xl p-4">
     <!-- <div class="text-red-500">
       {{ count }}
     </div> -->
