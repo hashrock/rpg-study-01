@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useGameEngine } from "./useGameEngine";
+import LogPane from "./components/LogPane.vue";
 
 const { count, logs, addLog, iter, wait, waitKey, isButtonPressed, mode } =
   useGameEngine();
@@ -25,9 +26,7 @@ function onClickStart() {
     <div class="text-red-500">
       {{ count }}
     </div>
-    <div>
-      {{ logs }}
-    </div>
+    <LogPane class="h-[200px] bg-gray-100" :logs="logs" />
 
     <div>{{ mode }} {{ isButtonPressed }}</div>
     <div>

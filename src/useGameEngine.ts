@@ -1,9 +1,9 @@
 import { onMounted, ref } from "vue";
-import type { Mode } from "./types";
+import type { LogItem, Mode } from "./types";
 
 export const useGameEngine = () => {
   const count = ref(0);
-  const logs = ref<string[]>([]);
+  const logs = ref<LogItem[]>([]);
   const waitTime = ref(0);
 
   const mode = ref<Mode>("normal");
@@ -54,7 +54,10 @@ export const useGameEngine = () => {
   }
 
   function addLog(str: string) {
-    logs.value.push(str);
+    logs.value.push({
+      ts: Date.now(),
+      message: str,
+    });
   }
 
   return { count, logs, addLog, iter, wait, mode, isButtonPressed, waitKey };
